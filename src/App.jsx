@@ -3,7 +3,7 @@ import {
   Wallet, TrendingUp, Search, Briefcase, Clock, 
   Settings, Plus, Download, Upload, Trash2, Activity,
   ArrowRightLeft, AlertCircle, RefreshCw, ChevronDown, Check, X,
-  Info
+  Info, FileText, PieChart, BarChart2
 } from 'lucide-react';
 
 // =========================================================================
@@ -72,9 +72,88 @@ const NIFTY_STOCKS = UNIQUE_NIFTY_SYMBOLS.map(symbol => ({
   name: `${symbol} - Nifty 500 Constituent` 
 }));
 
+// --- DATA: User Provided NSE ETFs ---
+const NSE_ETFS = [
+  { symbol: "LIQUIDETF", name: "Nifty1D rate index" },
+  { symbol: "NEXT50", name: "Nifty Next 50" },
+  { symbol: "HDFCNIFTY", name: "Nifty 50" },
+  { symbol: "SETFNN50", name: "Nifty Next 50" },
+  { symbol: "SETFNIFBK", name: "Nifty Bank" },
+  { symbol: "NIFTY1", name: "Nifty 50" },
+  { symbol: "MOSILVER", name: "Domestic Price of Physical Silver" },
+  { symbol: "EBBETF0430", name: "Nifty BHARAT Bond" },
+  { symbol: "SILVERBND", name: "Commodity - Silver" },
+  { symbol: "SENSEXBETA", name: "SENSEX" },
+  { symbol: "BANKETF", "name": "Mirae Asset Nifty Bank ETF" },
+  { symbol: "SENSEXIETF", "name": "SENSEX" },
+  { symbol: "NIF100BEES", "name": "Nifty 100 TRI" },
+  { symbol: "SILVER360", "name": "Commodity-Silver" },
+  { symbol: "EBBETF0431", "name": "Nifty BHARAT Bond" },
+  { symbol: "QGOLDHALF", "name": "Gold" },
+  { symbol: "PSUBNKIETF", "name": "ICICI Prudential Nifty PSU Bank ETF" },
+  { symbol: "HSBCGOLD", "name": "Commodity" },
+  { symbol: "GOLD360", "name": "Commodity-Gold" },
+  { symbol: "HDFCNIFBAN", "name": "Nifty Bank" },
+  { symbol: "MOGOLD", "name": "Domestic Price of Physical Gold" },
+  { symbol: "HDFCSENSEX", "name": "SENSEX" },
+  { symbol: "NIFTYBETA", "name": "Nifty 50" },
+  { symbol: "GOLDBND", "name": "Commodity - Gold" },
+  { symbol: "COMMOIETF", "name": "ICICI Prudential Nifty Commodities ETF" },
+  { symbol: "MOMOMENTUM", "name": "Nifty 200 Momentum 30 Total Return Index" },
+  { symbol: "SBIMIDMOM", "name": "Nifty Midcap 150 Momentum 50 Index" },
+  { "symbol": "LICMFGOLD", "name": "Gold" },
+  { symbol: "SBIBPB", "name": "BSE PSU Bank Index TRI" },
+  { symbol: "IVZINGOLD", "name": "Gold" },
+  { "symbol": "HEALTHADD", "name": "DSP Nifty Healthcare ETF" },
+  { "symbol": "EQUAL50", "name": "Nifty50 Equal Weight" },
+  { "symbol": "PSUBANKADD", "name": "DSP Nifty PSU Bank ETF" },
+  { "symbol": "BANKBETA", "name": "Nifty Bank" },
+  { "symbol": "BSE500IETF", "name": "S&P BSE 500 index" },
+  { "symbol": "NEXT30ADD", "name": "BSE SENSEX Next 30 Index" },
+  { "symbol": "SENSEXETF", "name": "Mirae Asset S&P BSE Sensex ETF" },
+  { "symbol": "NIFTYADD", "name": "Nifty 50 Index" },
+  { "symbol": "MNC", "name": "Kotak Nifty MNC ETF" },
+  { "symbol": "SBINEQWETF", "name": "Nifty50 Equal Weight" },
+  { "symbol": "NIFTYBETF", "name": "Bajaj Finserv Nifty 50 ETF" },
+  { "symbol": "NIFTYQLITY", "name": "Aditya Birla Sun Life Nifty 200 Quality 30 ETF" },
+  { "symbol": "AXISNIFTY", "name": "Nifty 50" },
+  { "symbol": "VALUE", "name": "Nifty 500 Value 50" },
+  { "symbol": "MID150", "name": "Nifty Midcap 150 Index" },
+  { "symbol": "HDFCQUAL", "name": "HDFC NIFTY100 Quality 30 ETF" },
+  { "symbol": "HDFCNIF100", "name": "HDFC NIFTY 100 ETF" },
+  { "symbol": "ABSLBANETF", "name": "Nifty Bank" },
+  { "symbol": "NV20", "name": "Nifty50 Value 20" },
+  { "symbol": "NEXT50ETF", "name": "Nifty Next 50 Index" },
+  { "symbol": "EMULTIMQ", "name": "Nifty500 Multicap Momentum Quality 50 Total Return Index" },
+  { "symbol": "UNIONGOLD", "name": "Commodity Gold" },
+  { "symbol": "CHOICEGOLD", "name": "Gold" },
+  { "symbol": "BANKBETF", "name": "Bajaj Finserv Nifty Bank ETF" },
+  { "symbol": "BANKPSU", "name": "Nifty PSU Bank Total Return Index" },
+  { "symbol": "MONIFTY100", "name": "Nifty 100 Total Return Index" },
+  { "symbol": "AXSENSEX", "name": "AXIS S&P BSE SENSEX ETF" },
+  { "symbol": "LICNMID100", "name": "LIC MF Nifty Midcap 100 ETF" },
+  { "symbol": "MOMENTUM30", "name": "Nifty 200 Momentum 30 Index" },
+  { "symbol": "GROWWNXT50", "name": "Index" },
+  { "symbol": "HDFCLOWVOL", "name": "HDFC NIFTY100 Low Volatility 30 ETF" },
+  { "symbol": "SNXT50BETA", "name": "BSE Sensex Next 50" },
+  { "symbol": "SENSEXADD", "name": "DSP S&P BSE Sensex ETF" },
+  { "symbol": "LICNETFGSC", "name": "GSEC10 NSE Index" },
+  { "symbol": "AONETMMQ50", "name": "Nifty Total Market Momentum Quality 50 TRI" },
+  { "symbol": "QUALITY30", "name": "Nifty200 Quality 30 Index" },
+  { "symbol": "BANKADD", "name": "DSP Nifty Bank ETF" },
+  { "symbol": "SBINMID150", "name": "Nifty Midcap 150 Index" },
+  { "symbol": "ELM250", "name": "Nifty LargeMidcap 250 TRI" },
+  { "symbol": "MIDCAPADD", "name": "Nifty Midcap 150 Index" },
+  { "symbol": "GROWWLOVOL", "name": "Nifty 500 Low Volatility 50 Index   TRI" },
+  { "symbol": "MSCIINDIA", "name": "MSCI India Index" },
+  { "symbol": "SBIVALETF", "name": "Nifty200 Value 30 Index" },
+  { "symbol": "CONS", "name": "Kotak Nifty India Consumption ETF" },
+  { "symbol": "EQUAL200", "name": "BSE 200 Equal Weight" }
+];
+
 // --- LOCAL CACHE TO PREVENT RATE LIMITING ---
 const PRICE_CACHE = {}; 
-const CACHE_DURATION_MS = 15 * 1000; // 15-second strict caching
+const CACHE_DURATION_MS = 30 * 1000; // 30-second strict caching
 
 const fetchStockPrice = async (symbol) => {
   // 1. In-Memory 15-second Cache
@@ -564,14 +643,13 @@ export default function App() {
   );
 
   const Dashboard = () => {
+    const [selectedAsset, setSelectedAsset] = useState(null);
+
     // Math Calculations
     const investedValue = activePortfolio.holdings.reduce((total, h) => total + (h.qty * h.avgPrice), 0);
     const currentValue = activePortfolio.holdings.reduce((total, h) => total + (h.qty * (livePrices[h.symbol] || h.avgPrice)), 0);
     const unrealizedPnl = currentValue - investedValue;
     const unrealizedPercent = investedValue > 0 ? (unrealizedPnl / investedValue) * 100 : 0;
-    
-    // Total Net Worth = Cash + Value of holdings
-    const netWorth = activePortfolio.wallet + currentValue;
 
     return (
       <div className="p-6 max-w-5xl mx-auto space-y-8 font-sans">
@@ -579,9 +657,14 @@ export default function App() {
         {/* Top Header: Net Worth & P&L */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end border-b border-zinc-800 pb-8 gap-6">
            <div>
-             <div className="text-[10px] font-medium text-zinc-500 uppercase tracking-widest mb-2">Total Net Worth</div>
-             <div className="text-5xl font-light text-zinc-100 tracking-tight">
-               {formatMoney(netWorth)}
+             {/* Net worth updated to only reflect Holdings */}
+             <div className="text-[10px] font-medium text-zinc-500 uppercase tracking-widest mb-2">Value of Active Holdings</div>
+             <div className="text-5xl font-light text-zinc-100 tracking-tight mb-2">
+               {formatMoney(currentValue)}
+             </div>
+             {/* Cash shown separately underneath */}
+             <div className="text-xs text-zinc-500 uppercase tracking-widest bg-zinc-900 inline-block px-3 py-1 rounded border border-zinc-800 mt-2">
+               Available Cash: <span className="text-zinc-300 font-mono">{formatMoney(activePortfolio.wallet)}</span>
              </div>
            </div>
            
@@ -617,15 +700,22 @@ export default function App() {
                 const currentVal = h.qty * currentPrice;
                 const pnl = currentVal - invested;
                 return (
-                  <div key={i} className="p-4 hover:bg-zinc-900 transition-colors flex flex-col md:flex-row justify-between md:items-center gap-4">
+                  <div key={i} 
+                    onClick={async () => {
+                      setSelectedAsset({ symbol: h.symbol, name: h.name, type: h.type, loading: true, initialAction: 'sell' });
+                      const price = h.type === 'mf' ? await fetchMFPrice(h.symbol) : await fetchStockPrice(h.symbol);
+                      if (price === null) showToast(`Failed to fetch live price for ${h.symbol}`, "error");
+                      setSelectedAsset({ symbol: h.symbol, name: h.name, type: h.type, price, loading: false, initialAction: 'sell' });
+                    }}
+                    className="p-4 hover:bg-zinc-900 transition-colors flex flex-col md:flex-row justify-between md:items-center gap-4 cursor-pointer group">
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className="font-medium text-zinc-100 text-sm">{h.symbol}</span>
-                        <span className="text-[9px] uppercase border border-zinc-700 text-zinc-500 px-1">{h.type}</span>
+                        <span className="font-medium text-zinc-100 text-sm group-hover:text-blue-400 transition-colors line-clamp-1">{h.type === 'mf' ? h.name : h.symbol}</span>
+                        <span className="text-[9px] uppercase border border-zinc-700 text-zinc-500 px-1 whitespace-nowrap">{h.type}</span>
                       </div>
                       <div className="text-xs text-zinc-500 mt-1 font-mono">{h.qty.toFixed(4)} Units @ {formatMoney(h.avgPrice)}</div>
                     </div>
-                    <div className="flex items-center gap-8 text-right font-mono text-sm">
+                    <div className="flex items-center gap-6 text-right font-mono text-sm">
                       <div className="hidden sm:block">
                         <div className="text-[10px] text-zinc-500 uppercase tracking-widest mb-1">Invested</div>
                         <div className="text-zinc-300">{formatMoney(invested)}</div>
@@ -637,6 +727,13 @@ export default function App() {
                       <div className={`w-20 ${pnl >= 0 ? 'text-green-500' : 'text-red-500'}`}>
                         {pnl >= 0 ? '+' : ''}{((pnl / invested) * 100).toFixed(2)}%
                       </div>
+                      {/* Direct Sell Button */}
+                      <button 
+                        className="ml-2 px-3 py-1.5 text-[10px] uppercase tracking-widest text-red-400 hover:text-white border border-red-900/50 hover:bg-red-800 transition-colors bg-zinc-950"
+                        title="Sell Holding"
+                      >
+                        Sell
+                      </button>
                     </div>
                   </div>
                 );
@@ -644,6 +741,9 @@ export default function App() {
             </div>
           )}
         </div>
+        
+        {/* Render Trade Modal if an asset is clicked */}
+        {selectedAsset && <TradeModal asset={selectedAsset} onClose={() => setSelectedAsset(null)} />}
       </div>
     );
   };
@@ -661,6 +761,15 @@ export default function App() {
         s.symbol.toLowerCase().includes(searchQuery.toLowerCase()) || 
         s.name.toLowerCase().includes(searchQuery.toLowerCase())
       ).slice(0, 50); 
+    }, [searchQuery]);
+
+    // Added ETF Search filtering
+    const etfResults = useMemo(() => {
+      if (!searchQuery) return NSE_ETFS.slice(0, 20); // show top 20 by default
+      return NSE_ETFS.filter(e => 
+        e.symbol.toLowerCase().includes(searchQuery.toLowerCase()) || 
+        e.name.toLowerCase().includes(searchQuery.toLowerCase())
+      );
     }, [searchQuery]);
 
     useEffect(() => {
@@ -690,6 +799,12 @@ export default function App() {
             Equities (NSE)
           </button>
           <button 
+            className={`text-xs font-medium uppercase tracking-widest transition-colors ${marketType === 'etfs' ? 'text-zinc-100' : 'text-zinc-600 hover:text-zinc-400'}`}
+            onClick={() => { setMarketType('etfs'); setSearchQuery(''); }}
+          >
+            ETFs
+          </button>
+          <button 
             className={`text-xs font-medium uppercase tracking-widest transition-colors ${marketType === 'mf' ? 'text-zinc-100' : 'text-zinc-600 hover:text-zinc-400'}`}
             onClick={() => { setMarketType('mf'); setSearchQuery(''); }}
           >
@@ -701,7 +816,7 @@ export default function App() {
           <Search className="absolute left-3 top-3 text-zinc-600" size={16} />
           <input 
             type="text"
-            placeholder={marketType === 'stocks' ? "Search 500+ Nifty equities..." : "Search Mutual Funds..."}
+            placeholder={marketType === 'stocks' ? "Search 500+ Nifty equities..." : marketType === 'etfs' ? "Search ETF tracking funds..." : "Search Mutual Funds..."}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full bg-zinc-950 border border-zinc-800 pl-10 pr-4 py-2.5 text-zinc-100 text-sm focus:outline-none focus:border-zinc-500 transition-colors"
@@ -714,6 +829,17 @@ export default function App() {
               <div>
                 <div className="text-zinc-100 font-medium text-sm">{stock.symbol}</div>
                 <div className="text-xs text-zinc-500 mt-0.5">{stock.name}</div>
+              </div>
+              <div className="text-[10px] uppercase tracking-widest text-zinc-600 group-hover:text-zinc-300 transition-colors border border-zinc-800 px-2 py-1">Trade</div>
+            </div>
+          ))}
+
+          {/* Added rendering for ETF Results */}
+          {marketType === 'etfs' && etfResults.map(etf => (
+            <div key={etf.symbol} onClick={() => handleAssetClick({...etf, type: 'stock'})} className="p-4 bg-zinc-950 hover:bg-zinc-900 cursor-pointer flex justify-between items-center transition-colors group">
+              <div>
+                <div className="text-zinc-100 font-medium text-sm">{etf.symbol}</div>
+                <div className="text-xs text-zinc-500 mt-0.5">{etf.name}</div>
               </div>
               <div className="text-[10px] uppercase tracking-widest text-zinc-600 group-hover:text-zinc-300 transition-colors border border-zinc-800 px-2 py-1">Trade</div>
             </div>
@@ -738,7 +864,8 @@ export default function App() {
   };
 
   const TradeModal = ({ asset, onClose }) => {
-    const [action, setAction] = useState('buy');
+    // Note: Accepts `initialAction` so Dashboard can pre-select 'sell'
+    const [action, setAction] = useState(asset.initialAction || 'buy');
     const [amount, setAmount] = useState('');
     const [qty, setQty] = useState('');
     const [sipDate, setSipDate] = useState('5');
@@ -777,7 +904,7 @@ export default function App() {
         } else {
           newHoldings.push({ symbol: asset.symbol, name: asset.name, type: asset.type, qty: finalQty, avgPrice: asset.price });
         }
-        newOrders.unshift({ id: Date.now(), date: new Date().toISOString(), symbol: asset.symbol, type: asset.type, action: 'BUY', qty: finalQty, price: asset.price, total: totalCost });
+        newOrders.unshift({ id: Date.now(), date: new Date().toISOString(), symbol: asset.symbol, name: asset.name, type: asset.type, action: 'BUY', qty: finalQty, price: asset.price, total: totalCost });
         showToast(`Successfully bought ${asset.symbol}`);
 
       } else if (action === 'sell') {
@@ -807,7 +934,7 @@ export default function App() {
         if (h.qty - sellQty <= 0.0001) newHoldings.splice(existingIdx, 1);
         else newHoldings[existingIdx] = { ...h, qty: h.qty - sellQty };
         
-        newOrders.unshift({ id: Date.now(), date: new Date().toISOString(), symbol: asset.symbol, type: asset.type, action: 'SELL', qty: sellQty, price: asset.price, total: totalProceeds, pnl: profitLossOnTrade });
+        newOrders.unshift({ id: Date.now(), date: new Date().toISOString(), symbol: asset.symbol, name: asset.name, type: asset.type, action: 'SELL', qty: sellQty, price: asset.price, total: totalProceeds, pnl: profitLossOnTrade });
         showToast(`Successfully sold ${asset.symbol}`);
 
       } else if (action === 'sip') {
@@ -947,73 +1074,195 @@ export default function App() {
     );
   };
 
-  const Ledger = () => (
-    <div className="p-6 max-w-4xl mx-auto space-y-12">
-      <section>
-        <h2 className="text-xs uppercase tracking-widest font-medium text-zinc-500 mb-4 flex items-center gap-2"><Clock size={14}/> Active SIPs / Automations</h2>
-        {activePortfolio.sips.length === 0 ? (
-          <div className="py-8 text-zinc-600 text-sm text-center border border-dashed border-zinc-800">No active plans.</div>
-        ) : (
-          <div className="border border-zinc-800 divide-y divide-zinc-800 bg-zinc-950">
-            {activePortfolio.sips.map(s => (
-              <div key={s.id} className="p-4 flex justify-between items-center">
-                <div>
-                  <div className="font-medium text-zinc-100 text-sm">{s.symbol}</div>
-                  <div className="text-[10px] text-zinc-500 mt-1 uppercase tracking-widest">Execute Day: {s.dateOfMonth}</div>
-                </div>
-                <div className="flex items-center gap-6">
-                  <div className="text-zinc-100 font-mono text-sm">{formatMoney(s.amount)}/mo</div>
-                  <button onClick={() => {
-                    setConfirmDialog({
-                      message: `Cancel monthly SIP for ${s.symbol}?`,
-                      onConfirm: () => {
-                        updateActivePortfolio({ sips: activePortfolio.sips.filter(x => x.id !== s.id) });
-                        showToast(`SIP for ${s.symbol} cancelled.`);
-                      }
-                    });
-                  }} className="text-red-500 text-[9px] border border-red-900/50 px-2 py-1 uppercase tracking-widest hover:bg-red-950 transition-colors">Cancel</button>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </section>
+  const Ledger = () => {
+    // --- ANALYTICS CALCULATIONS ---
+    const sellOrders = activePortfolio.orders.filter(o => o.action.includes('SELL') && o.pnl !== undefined);
+    const winningTrades = sellOrders.filter(o => o.pnl > 0);
+    const winRate = sellOrders.length > 0 ? ((winningTrades.length / sellOrders.length) * 100).toFixed(1) : 0;
+    
+    const bestTrade = sellOrders.reduce((max, o) => (o.pnl > max.pnl ? o : max), { pnl: -Infinity });
+    const worstTrade = sellOrders.reduce((min, o) => (o.pnl < min.pnl ? o : min), { pnl: Infinity });
 
-      <section>
-        <h2 className="text-xs uppercase tracking-widest font-medium text-zinc-500 mb-4 flex items-center gap-2"><ArrowRightLeft size={14}/> Execution Log</h2>
-        {activePortfolio.orders.length === 0 ? (
-          <div className="py-8 text-zinc-600 text-sm text-center border border-dashed border-zinc-800">No execution history.</div>
-        ) : (
-          <div className="border border-zinc-800 divide-y divide-zinc-800 bg-zinc-950 font-mono text-sm">
-            {activePortfolio.orders.map(o => (
-              <div key={o.id} className="p-4 flex flex-col sm:flex-row justify-between gap-3">
-                <div className="flex items-center gap-4">
-                  <span className={`text-[10px] uppercase w-16 px-1 py-0.5 text-center border ${o.action.includes('BUY') ? 'border-green-900/50 text-green-500 bg-green-950/20' : 'border-red-900/50 text-red-500 bg-red-950/20'}`}>
-                    {o.action}
-                  </span>
-                  <div>
-                    <div className="text-zinc-100 font-sans">{o.symbol}</div>
-                    <div className="text-zinc-500 text-[10px] font-sans mt-0.5">{new Date(o.date).toLocaleString()}</div>
-                  </div>
-                </div>
-                <div className="text-right flex flex-col justify-center">
-                  <div className="text-zinc-400 text-xs">
-                    {o.qty.toFixed(4)} @ {formatMoney(o.price)}
-                  </div>
-                  <div className="text-zinc-100 font-medium mt-0.5">{formatMoney(o.total)}</div>
-                  {o.pnl !== undefined && (
-                    <div className={`text-[10px] mt-1 ${o.pnl >= 0 ? 'text-green-500' : 'text-red-500'}`}>
-                      PNL: {o.pnl >= 0 ? '+' : ''}{formatMoney(o.pnl)}
-                    </div>
-                  )}
-                </div>
-              </div>
-            ))}
+    const totalTrades = activePortfolio.orders.length;
+
+    const exportAdvancedReport = () => {
+      const investedValue = activePortfolio.holdings.reduce((sum, h) => sum + (h.qty * h.avgPrice), 0);
+      const currentValue = activePortfolio.holdings.reduce((sum, h) => sum + (h.qty * (livePrices[h.symbol] || h.avgPrice)), 0);
+      const unrealizedPnl = currentValue - investedValue;
+      const totalPnl = (activePortfolio.realizedPnl || 0) + unrealizedPnl;
+      const netWorth = activePortfolio.wallet + currentValue;
+
+      let csv = "PAPERTRADE ADVANCED PORTFOLIO REPORT\n";
+      csv += `Generated On,${new Date().toLocaleString().replace(',', '')}\n`;
+      csv += `Portfolio Name,${activePortfolio.name}\n\n`;
+
+      // Section 1: Summary
+      csv += "--- PORTFOLIO SUMMARY ---\n";
+      csv += "Metric,Value\n";
+      csv += `Cash Balance,₹${activePortfolio.wallet.toFixed(2)}\n`;
+      csv += `Holdings Invested Value,₹${investedValue.toFixed(2)}\n`;
+      csv += `Holdings Current Value,₹${currentValue.toFixed(2)}\n`;
+      csv += `Total Net Worth,₹${netWorth.toFixed(2)}\n`;
+      csv += `Realized P&L,₹${(activePortfolio.realizedPnl || 0).toFixed(2)}\n`;
+      csv += `Unrealized P&L,₹${unrealizedPnl.toFixed(2)}\n`;
+      csv += `Total P&L,₹${totalPnl.toFixed(2)}\n`;
+      csv += `Win Rate,${winRate}%\n`;
+      csv += `Best Trade,${bestTrade.pnl !== -Infinity ? `${bestTrade.symbol} (+₹${bestTrade.pnl.toFixed(2)})` : 'N/A'}\n`;
+      csv += `Worst Trade,${worstTrade.pnl !== Infinity ? `${worstTrade.symbol} (₹${worstTrade.pnl.toFixed(2)})` : 'N/A'}\n\n`;
+
+      // Section 2: Holdings & Estimations
+      csv += "--- CURRENT HOLDINGS & PERFORMANCE ---\n";
+      csv += "Symbol,Name,Asset Type,Quantity,Avg Buy Price,Current Price,Invested Amount,Current Value,Unrealized P&L,Unrealized P&L %,Est. Holding Days,Est. Annualized Return (CAGR %)\n";
+      
+      activePortfolio.holdings.forEach(h => {
+         const currentP = livePrices[h.symbol] || h.avgPrice;
+         const inv = h.qty * h.avgPrice;
+         const cur = h.qty * currentP;
+         const pnl = cur - inv;
+         const pnlPct = inv > 0 ? (pnl / inv) * 100 : 0;
+         
+         // Estimate holding days based on the earliest BUY order for this symbol
+         const buys = activePortfolio.orders.filter(o => o.symbol === h.symbol && o.action.includes('BUY')).sort((a,b) => new Date(a.date) - new Date(b.date));
+         let daysHeld = 1;
+         if (buys.length > 0) {
+           const firstBuyDate = new Date(buys[0].date);
+           daysHeld = Math.max(1, Math.floor((new Date() - firstBuyDate) / (1000 * 60 * 60 * 24)));
+         }
+         
+         // Mathematical CAGR Proxy: (End/Begin)^(365/Days) - 1
+         let cagr = 0;
+         if (inv > 0 && cur > 0) {
+           cagr = (Math.pow((cur / inv), (365 / daysHeld)) - 1) * 100;
+         }
+
+         csv += `${h.symbol},"${h.name || ''}",${h.type},${h.qty.toFixed(4)},${h.avgPrice.toFixed(2)},${currentP.toFixed(2)},${inv.toFixed(2)},${cur.toFixed(2)},${pnl.toFixed(2)},${pnlPct.toFixed(2)}%,${daysHeld},${cagr.toFixed(2)}%\n`;
+      });
+
+      // Section 3: Execution Log
+      csv += "\n--- DETAILED EXECUTION LOG ---\n";
+      csv += "Date,Symbol,Asset Name,Action,Quantity,Execution Price,Total Value,Realized P&L\n";
+      activePortfolio.orders.forEach(o => {
+         const dt = new Date(o.date).toLocaleString().replace(',', '');
+         csv += `"${dt}",${o.symbol},"${o.name || ''}",${o.action},${o.qty.toFixed(4)},${o.price.toFixed(2)},${o.total.toFixed(2)},${o.pnl !== undefined ? o.pnl.toFixed(2) : ''}\n`;
+      });
+
+      // Trigger Download
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `PaperTrade_Analytics_${activePortfolio.name.replace(/\s+/g, '_')}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      showToast("Advanced Analytics Exported successfully.");
+    };
+
+    return (
+      <div className="p-6 max-w-4xl mx-auto space-y-12">
+        
+        {/* --- NEW SECTION: ADVANCED ANALYTICS --- */}
+        <section>
+          <div className="flex justify-between items-end mb-4">
+            <h2 className="text-xs uppercase tracking-widest font-medium text-zinc-500 flex items-center gap-2"><PieChart size={14}/> Advanced Analytics & Reports</h2>
+            <button 
+              onClick={exportAdvancedReport}
+              className="text-[10px] uppercase tracking-widest text-zinc-900 bg-zinc-100 hover:bg-white px-3 py-1.5 transition-colors flex items-center gap-2 font-medium"
+            >
+              <FileText size={14} /> Export Comprehensive CSV
+            </button>
           </div>
-        )}
-      </section>
-    </div>
-  );
+          
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="bg-zinc-950 border border-zinc-800 p-4 flex flex-col justify-center">
+              <div className="text-[10px] text-zinc-500 uppercase tracking-widest mb-1">Win Rate</div>
+              <div className="text-2xl font-light text-zinc-100">{winRate}%</div>
+            </div>
+            <div className="bg-zinc-950 border border-zinc-800 p-4 flex flex-col justify-center">
+              <div className="text-[10px] text-zinc-500 uppercase tracking-widest mb-1">Total Executions</div>
+              <div className="text-2xl font-light text-zinc-100">{totalTrades}</div>
+            </div>
+            <div className="bg-zinc-950 border border-zinc-800 p-4 flex flex-col justify-center">
+              <div className="text-[10px] text-zinc-500 uppercase tracking-widest mb-1">Best Trade (Realized)</div>
+              <div className={`text-sm font-medium mt-1 truncate ${bestTrade.pnl > 0 ? 'text-green-500' : 'text-zinc-500'}`}>
+                {bestTrade.pnl !== -Infinity && bestTrade.pnl > 0 ? `${bestTrade.symbol} (+${formatMoney(bestTrade.pnl)})` : 'N/A'}
+              </div>
+            </div>
+            <div className="bg-zinc-950 border border-zinc-800 p-4 flex flex-col justify-center">
+              <div className="text-[10px] text-zinc-500 uppercase tracking-widest mb-1">Worst Trade (Realized)</div>
+              <div className={`text-sm font-medium mt-1 truncate ${worstTrade.pnl < 0 ? 'text-red-500' : 'text-zinc-500'}`}>
+                {worstTrade.pnl !== Infinity && worstTrade.pnl < 0 ? `${worstTrade.symbol} (${formatMoney(worstTrade.pnl)})` : 'N/A'}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 className="text-xs uppercase tracking-widest font-medium text-zinc-500 mb-4 flex items-center gap-2"><Clock size={14}/> Active SIPs / Automations</h2>
+          {activePortfolio.sips.length === 0 ? (
+            <div className="py-8 text-zinc-600 text-sm text-center border border-dashed border-zinc-800">No active plans.</div>
+          ) : (
+            <div className="border border-zinc-800 divide-y divide-zinc-800 bg-zinc-950">
+              {activePortfolio.sips.map(s => (
+                <div key={s.id} className="p-4 flex justify-between items-center">
+                  <div>
+                    <div className="font-medium text-zinc-100 text-sm line-clamp-1">{s.type === 'mf' ? s.name : s.symbol}</div>
+                    <div className="text-[10px] text-zinc-500 mt-1 uppercase tracking-widest">Execute Day: {s.dateOfMonth}</div>
+                  </div>
+                  <div className="flex items-center gap-6">
+                    <div className="text-zinc-100 font-mono text-sm">{formatMoney(s.amount)}/mo</div>
+                    <button onClick={() => {
+                      setConfirmDialog({
+                        message: `Cancel monthly SIP for ${s.symbol}?`,
+                        onConfirm: () => {
+                          updateActivePortfolio({ sips: activePortfolio.sips.filter(x => x.id !== s.id) });
+                          showToast(`SIP for ${s.symbol} cancelled.`);
+                        }
+                      });
+                    }} className="text-red-500 text-[9px] border border-red-900/50 px-2 py-1 uppercase tracking-widest hover:bg-red-950 transition-colors">Cancel</button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </section>
+
+        <section>
+          <h2 className="text-xs uppercase tracking-widest font-medium text-zinc-500 mb-4 flex items-center gap-2"><ArrowRightLeft size={14}/> Execution Log</h2>
+          {activePortfolio.orders.length === 0 ? (
+            <div className="py-8 text-zinc-600 text-sm text-center border border-dashed border-zinc-800">No execution history.</div>
+          ) : (
+            <div className="border border-zinc-800 divide-y divide-zinc-800 bg-zinc-950 font-mono text-sm">
+              {activePortfolio.orders.map(o => (
+                <div key={o.id} className="p-4 flex flex-col sm:flex-row justify-between gap-3">
+                  <div className="flex items-center gap-4">
+                    <span className={`text-[10px] uppercase w-16 px-1 py-0.5 text-center border ${o.action.includes('BUY') ? 'border-green-900/50 text-green-500 bg-green-950/20' : 'border-red-900/50 text-red-500 bg-red-950/20'}`}>
+                      {o.action}
+                    </span>
+                    <div>
+                      <div className="text-zinc-100 font-sans line-clamp-1">{o.type === 'mf' ? (o.name || o.symbol) : o.symbol}</div>
+                      <div className="text-zinc-500 text-[10px] font-sans mt-0.5">{new Date(o.date).toLocaleString()}</div>
+                    </div>
+                  </div>
+                  <div className="text-right flex flex-col justify-center">
+                    <div className="text-zinc-400 text-xs">
+                      {o.qty.toFixed(4)} @ {formatMoney(o.price)}
+                    </div>
+                    <div className="text-zinc-100 font-medium mt-0.5">{formatMoney(o.total)}</div>
+                    {o.pnl !== undefined && (
+                      <div className={`text-[10px] mt-1 ${o.pnl >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                        PNL: {o.pnl >= 0 ? '+' : ''}{formatMoney(o.pnl)}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </section>
+      </div>
+    );
+  };
 
   const SettingsTab = () => (
     <div className="p-6 max-w-4xl mx-auto space-y-12">
@@ -1067,7 +1316,7 @@ export default function App() {
 
       <section>
         <h2 className="text-xs uppercase tracking-widest font-medium text-zinc-500 mb-4 flex items-center gap-2"><Settings size={14}/> Global Data Management</h2>
-        <div className="flex gap-4">
+        <div className="flex flex-wrap gap-4">
           <button 
             onClick={() => {
               const blob = new Blob([JSON.stringify(appData)], { type: 'application/json' });
@@ -1078,6 +1327,43 @@ export default function App() {
           >
             <Download size={14} /> Export Backup
           </button>
+          
+          <input 
+            type="file" id="importBackup" className="hidden" accept=".json" 
+            onChange={(e) => {
+              const file = e.target.files[0];
+              if (!file) return;
+              const reader = new FileReader();
+              reader.onload = (event) => {
+                try {
+                  const importedData = JSON.parse(event.target.result);
+                  // Basic validation to ensure it's actually our app's data format
+                  if (importedData.portfolios && Array.isArray(importedData.portfolios)) {
+                    setConfirmDialog({
+                      message: "Importing data will overwrite ALL current portfolios and history. Proceed?",
+                      onConfirm: () => {
+                        setAppData(importedData);
+                        showToast("Backup imported successfully.");
+                      }
+                    });
+                  } else {
+                    showToast("Invalid backup file format.", "error");
+                  }
+                } catch (err) {
+                  showToast("Failed to parse backup file.", "error");
+                }
+              };
+              reader.readAsText(file);
+              e.target.value = ''; // Reset input so the same file can be selected again if needed
+            }}
+          />
+          <button 
+            onClick={() => document.getElementById('importBackup').click()} 
+            className="border border-zinc-700 text-zinc-300 hover:bg-zinc-800 px-4 py-3 text-[10px] uppercase tracking-widest transition-colors flex items-center gap-2"
+          >
+            <Upload size={14} /> Import Backup
+          </button>
+
           <button 
             onClick={() => { 
               setConfirmDialog({

@@ -153,7 +153,7 @@ const NSE_ETFS = [
 
 // --- LOCAL CACHE TO PREVENT RATE LIMITING ---
 const PRICE_CACHE = {}; 
-const CACHE_DURATION_MS = 30 * 1000; // 30-second strict caching
+const CACHE_DURATION_MS = 60 * 1000; // 60-second strict caching
 
 const fetchStockPrice = async (symbol) => {
   // 1. In-Memory 15-second Cache
@@ -364,7 +364,7 @@ export default function App() {
     runSipCatchup();
   }, [appData.activePortfolioId]);
 
-  // Refresh Prices with 15-second polling approach
+  // Refresh Prices with 60-second polling approach
   useEffect(() => {
     if (!activePortfolio) return;
     
@@ -384,7 +384,7 @@ export default function App() {
 
     if (activeTab === 'dashboard') {
       refreshPortfolioPrices();
-      const interval = setInterval(refreshPortfolioPrices, 15000); // 15s poll
+      const interval = setInterval(refreshPortfolioPrices, 60000); // 60s poll
       return () => { isMounted = false; clearInterval(interval); };
     }
   }, [activeTab, activePortfolio?.holdings]);

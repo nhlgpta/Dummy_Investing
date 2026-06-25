@@ -729,24 +729,24 @@ export default function App() {
                       </div>
                       <div className="text-xs text-zinc-500 mt-1 font-mono">{h.qty.toFixed(4)} Units @ {formatMoney(h.avgPrice)}</div>
                     </div>
-                    <div className="flex items-center gap-6 text-right font-mono text-sm">
-                      <div className="hidden sm:block">
-                        <div className="text-[10px] text-zinc-500 uppercase tracking-widest mb-1">Invested</div>
-                        <div className="text-zinc-300">{formatCompactMoney(invested)}</div>
-                      </div>
-                      <div>
-                        <div className="text-[10px] text-zinc-500 uppercase tracking-widest mb-1">Current</div>
-                        <div className="text-zinc-100">{formatCompactMoney(currentVal)}</div>
-                      </div>
-                      <div className={`w-20 ${pnl >= 0 ? 'text-green-500' : 'text-red-500'}`}>
-                        {pnl >= 0 ? '+' : ''}{((pnl / invested) * 100).toFixed(2)}%
-                      </div>
-                      {/* Direct Sell Button */}
-                      <button 
-                        className="ml-2 px-3 py-1.5 text-[10px] uppercase tracking-widest text-red-400 hover:text-white border border-red-900/50 hover:bg-red-800 transition-colors bg-zinc-950"
-                        title="Sell Holding"
-                      >
-                        Sell
+                    <div className="flex items-center justify-between md:justify-end w-full md:w-auto gap-2 md:gap-6 font-mono text-sm mt-4 md:mt-0">
+                    <div className="hidden sm:block text-right">
+                      <div className="text-[10px] text-zinc-500 uppercase tracking-widest mb-1">Invested</div>
+                      <div className="text-zinc-300">{formatCompactMoney(invested)}</div>
+                    </div>
+                    <div className="text-left md:text-right">
+                      <div className="text-[10px] text-zinc-500 uppercase tracking-widest mb-1">Current</div>
+                      <div className="text-zinc-100">{formatCompactMoney(currentVal)}</div>
+                    </div>
+                    <div className={`text-right md:w-20 ${pnl >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                      {pnl >= 0 ? '+' : ''}{((pnl / invested) * 100).toFixed(2)}%
+                    </div>
+                    {/* Direct Sell Button */}
+                    <button 
+                      className="px-4 py-2 md:px-3 md:py-1.5 text-[10px] uppercase tracking-widest text-red-400 hover:text-white border border-red-900/50 hover:bg-red-800 transition-colors bg-zinc-950"
+                      title="Sell Holding"
+                    >
+                      Sell
                       </button>
                     </div>
                   </div>
